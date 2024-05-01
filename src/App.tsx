@@ -1,26 +1,43 @@
-import React, { Suspense } from "react";
+import React, { useRef, useEffect } from "react";
 import { Canvas, useLoader } from "@react-three/fiber";
-import { OrbitControls, Plane } from "@react-three/drei";
-import * as THREE from "three";
+import { TextureLoader, Mesh } from "three";
+import { OrbitControls } from "@react-three/drei";
 
-export function App() {
-    const texture = useLoader(THREE.TextureLoader, "logo512.png");
+function Terrain() {
+    const mesh = useRef<Mesh>(null);
+    const texture = useLoader(
+        TextureLoader,
+        "2024-04-07-00_00_2024-04-07-23_59_Sentinel-1_IW_VV+VH_VV_-_decibel_gamma0.png"
+    );
+
+    useEffect(() => {
+        if (mesh.current == null) return;
+
+        const geometry = mesh.current.geometry;
+        const positions = geometry.attributes.position.array;
+
+        for (let i = 0; i < positions.length; i += 3) {
+            positions[i + 2] = Math.random() * 1; // Modify the z-coordinate to create heights
+        }
+        geometry.attributes.position.needsUpdate = true;
+        geometry.computeVertexNormals();
+    }, []);
 
     return (
-        <Suspense fallback={null}>
-            <Canvas>
-                <ambientLight intensity={0.5} />
-                <pointLight position={[10, 10, 10]} />
-                <Plane
-                    args={[10, 10]}
-                    rotation={[-Math.PI / 2, 0, 0]}
-                    position={[0, 0, 0]}
-                >
-                    <meshStandardMaterial attach="material" map={texture} />
-                </Plane>
+        <mesh ref={mesh} rotation={[-Math.PI / 2, 0, 0]}>
+            <planeGeometry args={[100, 100, 100, 100]} />
+            <meshStandardMaterial map={texture} wireframe={false} />
+        </mesh>
+    );
+}
 
-                <OrbitControls />
-            </Canvas>
-        </Suspense>
+export function App() {
+    return (
+        <Canvas style={{ width: "100vw", height: "100vh" }}>
+            <ambientLight intensity={0.5} />
+            <pointLight position={[10, 10, 10]} />
+            <Terrain />
+            <OrbitControls />
+        </Canvas>
     );
 }
