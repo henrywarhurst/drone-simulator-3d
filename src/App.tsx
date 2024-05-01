@@ -1,26 +1,25 @@
 import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { Canvas, useLoader } from '@react-three/fiber';
+import { OrbitControls, Plane } from '@react-three/drei';
+import * as THREE from 'three';
 
-function App() {
+function Scene() {
+  // Assuming the map tile is located at 'path/to/your/map-tile.jpg'
+  const texture = useLoader(THREE.TextureLoader, 'path/to/your/map-tile.jpg');
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Canvas>
+      <ambientLight intensity={0.5} />
+      <pointLight position={[10, 10, 10]} />
+      <Plane args={[10, 10]} rotation={[-Math.PI / 2, 0, 0]} position={[0, 0, 0]}>
+        <meshStandardMaterial attach="material" map={texture} />
+      </Plane>
+      <OrbitControls />
+    </Canvas>
   );
 }
 
-export default App;
+export default function App() {
+  return <Scene />;
+}
+
