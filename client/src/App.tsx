@@ -37,7 +37,11 @@ export function App() {
     useSendVideoFrames(canvasRef);
 
     return (
-        <Canvas ref={canvasRef} style={{ width: "100vw", height: "100vh" }}>
+        <Canvas
+            ref={canvasRef}
+            gl={{ preserveDrawingBuffer: true }}
+            style={{ width: "100vw", height: "100vh" }}
+        >
             <ambientLight intensity={0.5} />
             <pointLight position={[10, 10, 10]} />
             <Terrain />
