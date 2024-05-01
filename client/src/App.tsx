@@ -2,6 +2,7 @@ import React, { useRef, useEffect } from "react";
 import { Canvas, useLoader } from "@react-three/fiber";
 import { TextureLoader, Mesh } from "three";
 import { OrbitControls } from "@react-three/drei";
+import { useSendVideoFrames } from "./hooks/useSendVideoFrames";
 
 function Terrain() {
     const mesh = useRef<Mesh>(null);
@@ -32,8 +33,11 @@ function Terrain() {
 }
 
 export function App() {
+    const canvasRef = useRef<HTMLCanvasElement>(null);
+    useSendVideoFrames(canvasRef);
+
     return (
-        <Canvas style={{ width: "100vw", height: "100vh" }}>
+        <Canvas ref={canvasRef} style={{ width: "100vw", height: "100vh" }}>
             <ambientLight intensity={0.5} />
             <pointLight position={[10, 10, 10]} />
             <Terrain />

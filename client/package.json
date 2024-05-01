@@ -2,6 +2,7 @@
     "name": "3d-drone-simulator",
     "version": "0.1.0",
     "private": true,
+    "proxy": "http://localhost:3001",
     "dependencies": {
         "@react-three/drei": "^9.105.5",
         "@react-three/fiber": "^8.16.3",

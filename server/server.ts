@@ -1,21 +1,22 @@
-const express = require('express');
-const multer = require('multer');
-const { exec } = require('child_process');
-const app = express();
-const upload = multer();
+const ws = require('ws');
+const server = new ws.Server({ port: 8080 });
 
-app.post('/upload', upload.single('frame'), (req, res) => {
-    const ffmpegCommand = `ffmpeg -f image2pipe -i - -c:v libx265 -f mpegts udp://127.0.0.1:23000`;
-    const ffmpegProcess = exec(ffmpegCommand);
+server.on('connection', function(socket) {
+    console.log('Client connected');
 
-    // Pipe the image buffer directly into FFmpeg's stdin
-    ffmpegProcess.stdin.write(req.file.buffer);
-    ffmpegProcess.stdin.end();
+    socket.on('message', function(data) {
+        console.log('Received frame:', data);
+        // Process the received frame data here
+    });
 
-    res.status(204).send();
+    socket.on('close', () => {
+        console.log('Connection closed');
+    });
+
+    socket.on('error', (error) => {
+        console.error('WebSocket error:', error);
+    });
 });
 
-app.listen(3000, () => {
-    console.log('Server is running on http://localhost:3000');
-});
+console.log('WebSocket server is running on ws://localhost:8080');
 
