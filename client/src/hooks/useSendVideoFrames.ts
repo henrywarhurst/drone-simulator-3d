@@ -2,7 +2,7 @@ import { useEffect, useRef } from "react";
 
 const ENDPOINT = "ws://localhost:8080";
 const MILLIS_PER_SECOND = 1000;
-const FPS = 30;
+const FPS = 15;
 
 export function useSendVideoFrames(
     canvasRef: React.RefObject<HTMLCanvasElement>
