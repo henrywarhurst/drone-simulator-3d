@@ -40,7 +40,11 @@ export function App() {
         <Canvas
             ref={canvasRef}
             gl={{ preserveDrawingBuffer: true }}
-            style={{ width: "100vw", height: "100vh" }}
+            style={{
+                width: "1280px",
+                height: "720px",
+                border: "1px solid black",
+            }}
         >
             <ambientLight intensity={0.5} />
             <pointLight position={[10, 10, 10]} />
